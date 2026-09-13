@@ -250,9 +250,19 @@ const names = arr => arr.map(a => a === T.me ? `<span class="me">${esc(a)}</span
 
 function head(key){
   const s = T.sections[key];
-  return `<div class="sec-head"><h2>${esc(p(s))}</h2><span class="en-sub">${esc(s.sub)}</span></div>`;
+  if (!s) return "";
+  return `<div class="sec-head"><h2>${esc(p(s))}</h2><span class="en-sub">${esc(s.sub || "")}</span></div>`;
 }
+
+/* 整节容错：data.js 里某一节被注释掉或删掉时，这一节直接不显示，
+   而不是整个页面白屏。所以你可以放心地注释掉任何一节。 */
+function sec(key, body){
+  if (!body) return "";
+  return `<section id="${key}">${head(key)}${body}</section>`;
+}
+const has = list => Array.isArray(list) && list.length > 0;
 function rows(list){
+  if (!has(list)) return "";
   return `<div class="rows">${list.map(r => `
     <div class="row">
       <div class="row-when">${esc(p(r.w))}</div>
@@ -306,11 +316,10 @@ function render(){
 
   const out = [];
 
-  out.push(`<section id="about">${head("about")}<div class="prose">${
-    T.about[L()].map(x => `<p>${x}</p>`).join("")
-  }</div></section>`);
+  out.push(sec("about", has(T.about && T.about[L()])
+    ? `<div class="prose">${T.about[L()].map(x => `<p>${x}</p>`).join("")}</div>` : ""));
 
-  out.push(`<section id="interests">${head("interests")}<div class="interests">${
+  out.push(sec("interests", !has(T.interests) ? "" : `<div class="interests">${
     T.interests.map((i, n) => {
       const newGroup = n === 0 || T.interests[n - 1].g !== i.g;
       return `<div class="interest">
@@ -321,11 +330,11 @@ function render(){
         <p>${p(i.d)}</p>
       </div>`;
     }).join("")
-  }</div></section>`);
+  }</div>`));
 
-  out.push(`<section id="news">${head("news")}<div class="news">${
+  out.push(sec("news", !has(T.news) ? "" : `<div class="news">${
     T.news.map(n => `<div class="news-row"><div class="news-date">${esc(n.d)}</div><div class="news-body">${p(n.t)}</div></div>`).join("")
-  }</div></section>`);
+  }</div>`));
 
   /* PREPRINTS —— 在投/预印本已隐藏。要重新显示：
      1) 在 data.js 里取消 preprintsHead / preprints 那段的注释；
@@ -339,8 +348,8 @@ function render(){
         <div class="minor-what"><h3>${esc(m.t)}</h3></div>
       </div>`).join("")}</div>
   */
-  out.push(`<section id="pubs">${head("pubs")}
-    <div class="stats">${T.stats.map(s => {
+  out.push(sec("pubs", !has(T.pubs) && !has(T.minor) ? "" : `
+    <div class="stats">${(T.stats || []).map(s => {
       const sc = window.SCHOLAR;
       const n = (s.id === "citations" && sc && sc.citedby) ? String(sc.citedby) : s.n;
       let lab = p(s.l);
@@ -350,9 +359,9 @@ function render(){
     <p class="stat-note">${esc(window.SCHOLAR && window.SCHOLAR.updated
       ? p(T.statNoteAuto).replace("{date}", window.SCHOLAR.updated)
       : p(T.statNote))}</p>
-    <p class="subhead">${esc(p(T.pubHeads.a))}</p>
-    <div class="pubs">${T.pubs.map(pubCard).join("")}</div>
-    <p class="subhead">${esc(p(T.pubHeads.b))}</p>
+    ${!has(T.pubs) ? "" : `<p class="subhead">${esc(p(T.pubHeads.a))}</p>
+    <div class="pubs">${T.pubs.map(pubCard).join("")}</div>`}
+    ${!has(T.minor) ? "" : `<p class="subhead">${esc(p(T.pubHeads.b))}</p>
     <div class="minor">${T.minor.map(m => `
       <div class="minor-row">
         <div class="minor-venue"><b>${esc(p(m.v))}</b>${esc(m.y)}${m.rank ? ` · ${esc(m.rank)}` : ""}</div>
@@ -360,13 +369,13 @@ function render(){
           <h3>${esc(m.t)}${m.role ? `<span class="minor-role">${esc(p(T.roles[m.role]))}</span>` : ""}</h3>
           <p>${names(m.a)}${m.s ? ` — ${esc(p(m.s))}` : ""}</p>
         </div>
-      </div>`).join("")}</div>
-  </section>`);
+      </div>`).join("")}</div>`}
+  `));
 
-  out.push(`<section id="service">${head("service")}${rows(T.service)}</section>`);
-  out.push(`<section id="talks">${head("talks")}${rows(T.talks)}</section>`);
-  out.push(`<section id="exp">${head("exp")}${rows(T.exp)}</section>`);
-  out.push(`<footer class="site">${T.footer[L()].map(f => `<span>${esc(f)}</span>`).join("")}</footer>`);
+  out.push(sec("service", rows(T.service)));
+  out.push(sec("talks", rows(T.talks)));
+  out.push(sec("exp", rows(T.exp)));
+  out.push(`<footer class="site">${((T.footer && T.footer[L()]) || []).map(f => `<span>${esc(f)}</span>`).join("")}</footer>`);
 
   document.getElementById("main").innerHTML = out.join("");
 }
