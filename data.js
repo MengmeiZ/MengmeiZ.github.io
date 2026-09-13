@@ -102,7 +102,7 @@ const T = {
   /* ---- 动态。d 是日期，新的放最上面 ---- */
   news: [
     {d:"2026.07", t:{zh:"担任 <strong>WWW 2026</strong> Industry Session 主席（Session Chair），并现场报告 FRiskGPT。",
-                     en:"Served as <strong>Session Chair</strong> for Industry Session 7 at <strong>WWW 2026</strong>, and presented FRiskGPT."}},
+                     en:"Served as a <strong>Session Chair</strong> at <strong>WWW 2026</strong>, and presented FRiskGPT."}},
     {d:"2026", t:{zh:"两篇论文被 <strong>WWW 2026</strong> 接收：FRiskGPT（共同第一作者）与 Graph-Tokenizing LLMs。<em>补录用月份</em>",
                   en:"Two papers accepted to <strong>WWW 2026</strong>: FRiskGPT (co-first author) and Graph-Tokenizing LLMs. <em>fill in month</em>"}},
     {d:"2025", t:{zh:"图基础模型综述被 <strong>IEEE TPAMI</strong> 接收；两篇论文被 <strong>KDD 2025</strong> 接收。",
@@ -264,10 +264,10 @@ const T = {
   exp: [
     {w:{zh:"至今",en:"Present"}, t:{zh:"中国电信 · 数据发展中心（支付）",en:"China Telecom · Data Development Center (Payment)"},
      s:{zh:"博士后研究员。方向：大模型与图智能、Data Agent、本体赋能穿透式监管。",
-        en:"Postdoctoral researcher. LLMs and graph intelligence, data agents, intelligent supervision. <em>fill in start year and title</em>"}},
+        en:"Postdoctoral researcher. LLMs and graph intelligence, data agents, ontology-driven supervision."}},
     {w:{zh:"实习",en:"Internship"}, t:{zh:"阿里巴巴集团",en:"Alibaba Group"},
      s:{zh:"研究实习生，GraphTranslator（WWW 2024）于实习期间完成。",
-        en:"Research intern; GraphTranslator (WWW 2024) was completed during this internship. <em>fill in dates and team</em>"}},
+        en:"Research intern; GraphTranslator (WWW 2024) was completed during this internship."}},
     {w:"2022.02–2023.02", t:{zh:"新加坡国立大学",en:"National University of Singapore"},
      s:{zh:"联合培养博士生（国家公派）。",en:"Visiting PhD student, China Scholarship Council joint program."}},
     {w:"2018.09–2023.09", t:{zh:"北京邮电大学 · 计算机学院",en:"Beijing Univ. of Posts and Telecommunications · School of Computer Science"},
